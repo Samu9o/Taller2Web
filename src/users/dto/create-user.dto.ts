@@ -15,4 +15,41 @@
 //   3. Add a decorator to each property
 // ─────────────────────────────────────────────────────────────────────────────
 
-// TODO: your code here
+import {
+	IsString,
+	IsNotEmpty,
+	MinLength,
+	MaxLength,
+	IsEmail,
+	IsInt,
+	Min,
+	Max,
+	IsOptional,
+	IsIn,
+} from 'class-validator';
+
+const UserRole = ['student', 'teacher', 'admin'] as const;
+type UserRole = (typeof UserRole)[number];
+
+export class CreateUserDto {
+	@IsString()
+	@IsNotEmpty()
+	@MinLength(2)
+	@MaxLength(50)
+	name: string;
+
+	@IsString()
+	@IsNotEmpty()
+	@IsEmail()
+	email: string;
+
+	@IsInt()
+	@Min(1)
+	@Max(120)
+	age: number;
+
+	@IsString()
+	@IsOptional()
+	@IsIn(UserRole)
+	role?: UserRole;
+}
