@@ -165,6 +165,14 @@ Open each file in this order and read the comments carefully:
 4. Why does the service throw `NotFoundException` instead of returning `null`?
 5. What is the difference between `@Get()` and `@Get(':id')`?
 
+### Answers
+
+1. The request fails with `400 Bad Request`. In `CreateProductDto`, `price` is validated with `@IsPositive()`, so negative values (like `-5`) are rejected by the global `ValidationPipe` before reaching the service.
+2. `ParseIntPipe` transforms the route param (which arrives as string) into a number and validates it. If `id` is not a valid integer, Nest returns `400 Bad Request`.
+3. A name like `""` (empty string) could pass if you only use `@IsString()`, because an empty string is still a string. `@IsNotEmpty()` enforces that the value is present and not empty.
+4. Throwing `NotFoundException` makes the API return a proper `404 Not Found` HTTP response. Returning `null` would be ambiguous and usually leads to weaker error handling in clients.
+5. `@Get()` handles `GET /products` (list or collection endpoint), while `@Get(':id')` handles `GET /products/:id` (single resource by identifier).
+
 ---
 
 ## 5. Activity 2 – Complete the Tasks Module
